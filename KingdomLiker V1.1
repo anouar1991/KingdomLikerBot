@@ -1,0 +1,87 @@
+
+var fuckyoutoo = document.body.innerHTML.match(/, ([a-z]*): fuckyou/)[1];
+var mutex = false;
+var limitOfTries = 1;
+var gotSuccess = true;
+var posts= [];
+function getPagesAjax(flager, order){ 
+                        var pagesData ={
+                            idtype: flager, 
+                            order: order,
+                            token: $("#token").attr("value"), 
+                        } 
+                        pagesData[fuckyoutoo] = fuckyou;
+                        $.get("http://kingdomlikes.com/free_points/page2", pagesData, function (a) {
+                            if((a instanceof Array))
+                              {
+                                //to fill the posts : 
+                                //posts = posts.concat(a);
+
+                                var page;
+                                for(page in a ){
+                                       // console.log(page);
+                                         $.get("http://kingdomlikes.com/free_points/count", {token: a[page].idef, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                    if(data["success"]){
+                                        token = data["count"];
+                                     }else{
+                                        token = 999999999;
+                                        }
+                                
+                                // while(!gotSuccess);
+                                setTimeout(function(){
+                                    deamon(a[page].idef,token,0);
+                                },0)
+                                
+                            });       
+                            var deamon = function (myId,token2,tries)   {
+                                var postData  = {
+                                    token: token
+                                , id: myId
+                                , check:1, csf: $("#token").attr("value")
+                             }
+                                postData[fuckyoutoo] = fuckyou;
+                                gotSuccess = false;
+                                if(tries>=limitOfTries)
+                                    {
+                                        // gotSuccess = true;
+                                        return false;}
+                               
+                                //console.log("token :" +token2+ " id: "+myId);
+                                $.post("http://kingdomlikes.com/free_points/check", postData
+                                , function (data) {
+                                        if (data['success'] ){
+                               console.log(data )
+                               console.log(" Flag : "+flager);
+                               gotSuccess = true;
+                               $("#points").text(data['points'])
+                             }else{
+                                // $.get("http://kingdomlikes.com/free_points/count", {token: myId, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                //     if(data["success"]){
+                                //         token2 = data["count"];
+                                //      }else{
+                                //         token2 = 999999999;
+                                //         }
+                                //     });  
+                                mutex = true;
+                                setTimeout(function(){
+                                    deamon(myId,token2,tries+1)
+                                },0)
+                             }
+                                })
+                            }
+
+                                        
+                            }
+                                
+                            }
+                        });
+}
+flager = [4,6,5, 7, 8,18,19]
+//flager = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+var starter = setInterval(function(){
+    for( k in flager){
+
+    getPagesAjax(flager[k], 5)
+}
+},7000)

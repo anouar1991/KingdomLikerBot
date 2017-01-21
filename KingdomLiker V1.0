@@ -1,0 +1,116 @@
+/*
+    start to get profit for a certain number of TRIES 
+    if it succeeds DELETE the POST from the ARRAY of POSTS else move on to NEXT ONE
+
+*/
+ var fuckyoutoo = document.body.innerHTML.match(/, ([a-z]*): fuckyou/)[1]
+var mutex = false;
+var limitOfTries = 1;
+var gotSuccess = true;
+var posts= [];
+function getPagesAjax(flager, order){ 
+                        var pagesData = 
+                        $.get("http://kingdomlikes.com/free_points/page2", {idtype: flager, order: order,token: $("#token").attr("value"), illfroghraolg: fuckyou}, function (a) {
+                            if((a instanceof Array))
+                              {
+                                //to fill the posts : 
+                                //posts = posts.concat(a);
+
+                                var page;
+                                for(page in a ){
+                                       // console.log(page);
+                                         $.get("http://kingdomlikes.com/free_points/count", {token: a[page].idef, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                    if(data["success"]){
+                                        token = data["count"];
+                                     }else{
+                                        token = 999999999;
+                                        }
+                                
+                                // while(!gotSuccess);
+                                setTimeout(function(){
+                                    deamon(a[page].idef,token,0);
+                                },0)
+                                
+                            });       
+                            var deamon = function (myId,token2,tries)   {
+                                gotSuccess = false;
+                                if(tries>=limitOfTries)
+                                    {
+                                        // gotSuccess = true;
+                                        return false;}
+                               
+                                //console.log("token :" +token2+ " id: "+myId);
+                                $.post("http://kingdomlikes.com/free_points/check", {token: token
+                                , id: myId
+                                , check:1, csf: $("#token").attr("value")
+                                ,/*hna*/ illfroghraolg: fuckyou}
+                                , function (data) {
+                                        if (data['success'] ){
+                               console.log(data )
+                               console.log(" Flag : "+flager);
+                               gotSuccess = true;
+                               $("#points").text(data['points'])
+                             }else{
+                                // $.get("http://kingdomlikes.com/free_points/count", {token: myId, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                //     if(data["success"]){
+                                //         token2 = data["count"];
+                                //      }else{
+                                //         token2 = 999999999;
+                                //         }
+                                //     });  
+                                mutex = true;
+                                setTimeout(function(){
+                                    deamon(myId,token2,tries+1)
+                                },0)
+                             }
+                                })
+                            }
+
+                                        
+                            }
+                                
+                            }
+                        });
+}
+flager = [4,6,5, 7, 8,18,19]
+//flager = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+var starter = setInterval(function(){
+    for( k in flager){
+
+    getPagesAjax(flager[k], 5)
+}
+},7000)
+
+
+// var deamon = function ()
+//                     {                              
+//                             if(!stop){
+//                             var target = document.getElementById(idpage);
+//                             var idmessage = id.find(".message");
+                            
+//                             $.post("http://kingdomlikes.com/free_points/check", {token: token
+//                                 , id: conteinerttitle.attr('id')
+//                                 , check:1, csf: $("#token").attr("value")
+//                                 ,/*hna*/ lgztcoqcupm: fuckyou}
+//                                 , function (data) {
+                            
+//                              if (data['success']){
+//                                console.log(data);
+//                              }else{
+//                                 if(flag != 6){
+//                      $.get("http://kingdomlikes.com/free_points/count", {token: conteinerttitle.attr('id'), type: flag, csf: $("#token").attr("value")}, function (data) {
+//                             if(data["success"]){
+//                                 token = data["count"];
+//                             }else{
+//                                 token = conteinerttitle.attr('data-token');
+//                             }
+//                             });
+//                     }
+//                                  deamon()
+//                              }
+                           
+//                                 });
+                    
+//                     }
+//                     }

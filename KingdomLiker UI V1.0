@@ -1,0 +1,214 @@
+function getPages(idpage, idType,start){
+    var skipButton = $(".skip");
+    skipButton.addClass("disable");
+    var idString = "#idpage" + idpage;
+    var id = document.getElementById("idpage"+idpage);
+    $(idString).fadeIn();
+    $(idString + " .mask").fadeIn(0);
+    var spinner = new Spinner(opts).spin(id);
+                idOrder = getOrder();
+
+                if((idOrder == 1 && items.length != 0)){
+                    console.info(items);
+                    setTimeout(function(){
+                        skipButton.removeClass("disable");
+                        $(idString + " .remove").remove();
+                        var item = items.pop();
+                        html = parsePageItem(item,idpage);
+                        $(idString + " .container").append(html);
+                        $(idString + " .mask").fadeOut();
+                        spinner.stop();
+                        if (flag == 21) {
+                            gapi.plusone.go("idpage"+idpage);
+                        }     
+                        if(count < 4){
+                            count = count + 1;
+                            var idpageaux = idpage +1;
+                            getPages(idpageaux,false);
+                        }     
+                    },3500);            
+                }else if(itemsAux.length != 0){
+                    console.info(itemsAux);
+                    setTimeout(function(){
+                        skipButton.removeClass("disable");
+                        $(idString + " .remove").remove();
+                        var item = itemsAux.pop();
+                        html = parsePageItem(item,idpage);
+                        $(idString + " .container").append(html);
+                        $(idString + " .mask").fadeOut();
+                        spinner.stop();
+                        if (flag == 21) {
+                            gapi.plusone.go("idpage"+idpage);
+                        }     
+                        if(count < 4){
+                            count = count + 1;
+                            var idpageaux = idpage +1;
+                            getPages(idpageaux,false);
+                        }     
+                    },3500);
+                }else{
+                    
+                    setTimeout(function(){
+                        $.get("http://kingdomlikes.com/free_points/page2", {idtype: idType, order: idOrder,token: $("#token").attr("value"), ywoulbgiseatys: fuckyou}, function (a) {
+                            skipButton.removeClass("disable");
+                            $(idString + " .remove").remove();
+                            
+                            if(a.hasOwnProperty("timeout")){
+                                if(a["timeout"] == 0){
+                                    waitTime = 1;
+                                }else{
+                                    waitTime = a["timeout"];
+                                }
+                                $(idString + " .container").append(getTimeExceeded(waitTime));
+                                $(idString).addClass("disabled");
+
+                            }else{
+                                if(!(a instanceof Array)){
+                                    a = [];
+                                }
+                                
+                                var item = a.pop();
+                                
+                                if(idOrder == 1 && a.length != 0){
+                                        items = a;
+                                }else if(a.length != 0){
+                                        itemsAux = a;
+                                }
+                                
+                                
+                                if(typeof item === 'undefined'){
+                                    /*var index = querys.indexOf(idOrder);
+                                    if (index > -1) {
+                                        querys.splice(index, 1);   
+                                    }
+                                    //restQuery(idOrder);
+                                    if(flag == 6 ){
+                                        $.get("http://kingdomlikes.com/free_points/limit", {idorder: idOrder}, function () {
+                                        //querys = s;
+                                        });
+                                    }*/
+
+                                    if(flag == 6 ){
+                                        $.get("http://kingdomlikes.com/free_points/limit", {idorder: idOrder}, function () {
+                                        //querys = s;
+                                        });
+                                    }
+                                    $(idString + " .container").append(nomore);
+                                    $(idString).addClass("disabled")
+                                }else{
+                                    html = parsePageItem(item,idpage);
+                                    $(idString + " .container").append(html);
+                                }
+                            }
+                            $(idString + " .mask").fadeOut();
+                            spinner.stop();
+                            if (flag == 21) {
+                                gapi.plusone.go("idpage"+idpage);
+                            }     
+                            if(count < 4){
+                                count = count + 1;
+                                var idpageaux = idpage +1;
+                                getPages(idpageaux,false);
+                            }
+                                             
+                        });
+                    },1500);
+                }
+}
+var stop = false ;
+function openWIndow(url, idpage) {  
+                    if(!stop){
+
+                    var pivot = 0;
+                        var id = $("#" + idpage);
+                        var conteinerttitle = id.find('.containertitle');
+                    var j = 0;
+                    token = conteinerttitle.attr('data-token');
+                    if(flag != 6){
+                     $.get("http://kingdomlikes.com/free_points/count", {token: conteinerttitle.attr('id'), type: flag, csf: $("#token").attr("value")}, function (data) {
+                            if(data["success"]){
+                                token = data["count"];
+                            }else{
+                                token = conteinerttitle.attr('data-token');
+                            }
+                            });
+                    }
+                                        
+                    var deamon = function ()
+                    {                              
+                            if(!stop){
+                            var target = document.getElementById(idpage);
+                            var idmessage = id.find(".message");
+                            
+                            $.post("http://kingdomlikes.com/free_points/check", {token: token
+                                , id: conteinerttitle.attr('id')
+                                , check:1, csf: $("#token").attr("value")
+                                ,/*hna*/ ywoulbgiseatys: fuckyou}
+                                , function (data) {
+                            
+                             if (data['success']){
+                               console.log(data);
+                             }else{
+                                if(flag != 6){
+                     $.get("http://kingdomlikes.com/free_points/count", {token: conteinerttitle.attr('id'), type: flag, csf: $("#token").attr("value")}, function (data) {
+                            if(data["success"]){
+                                token = data["count"];
+                            }else{
+                                token = conteinerttitle.attr('data-token');
+                            }
+                            });
+                    }
+                                 deamon()
+                             }
+                           
+                                });
+                    
+                    }
+                    }
+                    deamon();
+                }
+            }
+    //flags  4 19 16 6 7  8 1
+function refreSh(id){
+    for(var i = 5 ; i<= 8; i++)
+    {
+        getPages(i, id, false);
+    } 
+};
+
+flager = [4,19, 16, 6, 7, 8] ;
+i=0;
+flag = flager[i];//type of products 
+tries = 5 ;//tries
+var starter = setInterval(function(){
+if($(".button").length){
+$(".button").click();
+$(".button").remove();
+tries = 5;
+refreSh(flag);
+}else{
+    refreSh(flag);
+    tries--;
+    if(tries<=0){
+        if(i>=5)i=-1;
+        flag = flager[++i];
+        tries = 5;
+
+    }
+}
+
+// if(flager==10){
+//     flager = 1
+// }
+//     else{
+//         flager++
+//     }
+
+},5000)
+
+setInterval(function(){
+    stop = true;
+    setTimeout(function(){
+        stop = false;
+    },2000)
+},20000)
