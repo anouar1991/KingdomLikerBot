@@ -10,7 +10,7 @@ function getPagesAjax(flager, order){
                             token: $("#token").attr("value"), 
                         } 
                         pagesData[fuckyoutoo] = fuckyou;
-                        $.get("http://kingdomlikes.com/free_points/page2", pagesData, function (a) {
+                        $.get("https://kingdomlikes.com/free_points/page2", pagesData, function (a) {
 
                             if((a instanceof Array))
                               {
@@ -19,7 +19,7 @@ function getPagesAjax(flager, order){
                                 for(page in a ){
                                     
                                         count++;
-                                         $.get("http://kingdomlikes.com/free_points/count", {token: a[page].idef, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                         $.get("https://kingdomlikes.com/free_points/count", {token: a[page].idef, type: flager, csf: $("#token").attr("value")}, function (data) {
                                     if(data["success"]){
                                         token = data["count"];
                                      }else{
@@ -47,7 +47,7 @@ function getPagesAjax(flager, order){
                                
                                 
                                 checks++;
-                                $.post("http://kingdomlikes.com/free_points/check", postData
+                                $.post("https://kingdomlikes.com/free_points/check", postData
                                 , function (data) {
                                         if (data['success'] ){
                                             ++flagerList[flager];
@@ -57,7 +57,7 @@ function getPagesAjax(flager, order){
                                $("#points").text(data['points']);
                                
                              }else{
-                                // $.get("http://kingdomlikes.com/free_points/count", {token: myId, type: flager, csf: $("#token").attr("value")}, function (data) {
+                                // $.get("https://kingdomlikes.com/free_points/count", {token: myId, type: flager, csf: $("#token").attr("value")}, function (data) {
                                 //     if(data["success"]){
                                 //         token2 = data["count"];
                                 //      }else{
